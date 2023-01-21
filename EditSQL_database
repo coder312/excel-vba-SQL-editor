@@ -1,0 +1,62 @@
+Sub DisplayData()
+  Dim cnn As ADODB.Connection
+  Dim rst As ADODB.Recordset
+  Dim strSQL As String
+  Dim strConnect As String
+  
+  'Create the connection string
+  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;User ID=YourUsername;Password=YourPassword;"
+  
+  'Open the connection
+  Set cnn = New ADODB.Connection
+  cnn.Open strConnect
+  
+  'Create the SQL statement
+  strSQL = "SELECT * FROM YourTableName"
+  
+  'Open the recordset
+  Set rst = New ADODB.Recordset
+  rst.Open strSQL, cnn, adOpenStatic, adLockReadOnly
+  
+  'Copy the data to the worksheet
+  Sheet1.Range("A1").CopyFromRecordset rst
+  
+  'Close the recordset and connection
+  rst.Close
+  Set rst = Nothing
+  cnn.Close
+  Set cnn = Nothing
+End Sub
+
+Sub SaveChanges()
+  Dim cnn As ADODB.Connection
+  Dim strSQL As String
+  Dim strConnect As String
+  Dim r As Long, c As Long
+  
+  'Create the connection string
+  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;User ID=YourUsername;Password=YourPassword;"
+  
+  'Open the connection
+  Set cnn = New ADODB.Connection
+  cnn.Open strConnect
+  
+  'Loop through the rows in the worksheet
+  For r = 2 To Sheet1.UsedRange.Rows.Count
+    'Loop through the columns in the worksheet
+    For c = 1 To Sheet1.UsedRange.Columns.Count
+      'Create the SQL statement
+      strSQL = "UPDATE YourTableName SET " & Sheet1.Cells(1, c).Value & " = '" & Sheet1.Cells(r, c).Value & "' WHERE Column2 = '" & Sheet1.Cells(r, 2).Value & "'"
+      'Execute the SQL statement
+      cnn.Execute strSQL
+    Next c
+  Next r
+  
+  'Close the connection
+  cnn.Close
+  Set cnn = Nothing
+  
+  'Display a message box to confirm the update
+  MsgBox "Records updated successfully!", vbInformation
+End Sub
+
