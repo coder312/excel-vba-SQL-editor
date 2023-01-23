@@ -5,7 +5,7 @@ Sub DisplayData()
   Dim strConnect As String
   
   'Create the connection string
-  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;User ID=YourUsername;Password=YourPassword;"
+  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;Integrated Security=SSPI;"
   
   'Open the connection
   Set cnn = New ADODB.Connection
@@ -40,7 +40,7 @@ Sub SaveChanges()
   Dim r As Long, c As Long
   
   'Create the connection string
-  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;User ID=YourUsername;Password=YourPassword;"
+  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;Integrated Security=SSPI;"
   
   'Open the connection
   Set cnn = New ADODB.Connection
