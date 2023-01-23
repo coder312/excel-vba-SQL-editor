@@ -1,30 +1,32 @@
 Sub DisplayData()
-  Dim cnn As ADODB.Connection
+  Const connection As String = "Provider=SQLOLEDB;Data Source=RITA-HP-LAPTOP;Initial Catalog=POCdatabaseForExcel;Integrated Security=SSPI;"
+  Dim cnn As ADODB.connection
   Dim rst As ADODB.Recordset
   Dim strSQL As String
   Dim strConnect As String
   
   'Create the connection string
-  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;Integrated Security=SSPI;"
+  strConnect = connection
   
   'Open the connection
-  Set cnn = New ADODB.Connection
+  Set cnn = New ADODB.connection
   cnn.Open strConnect
   
   'Create the SQL statement
-  strSQL = "SELECT * FROM YourTableName"
+  strSQL = "SELECT * FROM MOCK_DATA"
   
   'Open the recordset
   Set rst = New ADODB.Recordset
   rst.Open strSQL, cnn, adOpenStatic, adLockReadOnly
   
   'Add Column Headings
-  For i = 0 to rst.Fields.Count -1
-  Sheet1.Cells(1,i+1).Value = rst.Fields(i).Name
+  For i = 0 To rst.Fields.Count - 1
+    Sheet1.Cells(1, i + 1).Value = rst.Fields(i).Name
   Next
+  'Range("A1:" + i).Item(xlnumbersastext).Ignore = True
   
   'Copy the data to the worksheet
-  Sheet1.Range("A1").CopyFromRecordset rst
+  Sheet1.Range("A2").CopyFromRecordset rst
   
   'Close the recordset and connection
   rst.Close
@@ -34,16 +36,16 @@ Sub DisplayData()
 End Sub
 
 Sub SaveChanges()
-  Dim cnn As ADODB.Connection
+  Dim cnn As ADODB.connection
   Dim strSQL As String
   Dim strConnect As String
   Dim r As Long, c As Long
   
   'Create the connection string
-  strConnect = "Provider=SQLOLEDB;Data Source=YourServerName;Initial Catalog=YourDatabaseName;Integrated Security=SSPI;"
+  strConnect = "Provider=SQLOLEDB;Data Source=RITA-HP-LAPTOP;Initial Catalog=POCdatabaseForExcel;Integrated Security=SSPI;"
   
   'Open the connection
-  Set cnn = New ADODB.Connection
+  Set cnn = New ADODB.connection
   cnn.Open strConnect
   
   'Loop through the rows in the worksheet
@@ -51,7 +53,7 @@ Sub SaveChanges()
     'Loop through the columns in the worksheet
     For c = 1 To Sheet1.UsedRange.Columns.Count
       'Create the SQL statement
-      strSQL = "UPDATE YourTableName SET " & Sheet1.Cells(1, c).Value & " = '" & Sheet1.Cells(r, c).Value & "' WHERE Column2 = '" & Sheet1.Cells(r, 2).Value & "'"
+      strSQL = "UPDATE MOCK_DATA SET " & Sheet1.Cells(1, c).Value & " = '" & Sheet1.Cells(r, c).Value & "' WHERE Column2 = '" & Sheet1.Cells(r, 2).Value & "'"
       'Execute the SQL statement
       cnn.Execute strSQL
     Next c
@@ -64,4 +66,3 @@ Sub SaveChanges()
   'Display a message box to confirm the update
   MsgBox "Records updated successfully!", vbInformation
 End Sub
-
