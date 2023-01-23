@@ -1,5 +1,6 @@
+Const connection As String = "Provider=SQLOLEDB;Data Source=RITA-HP-LAPTOP;Initial Catalog=POCdatabaseForExcel;Integrated Security=SSPI;"
+
 Sub DisplayData()
-  Const connection As String = "Provider=SQLOLEDB;Data Source=RITA-HP-LAPTOP;Initial Catalog=POCdatabaseForExcel;Integrated Security=SSPI;"
   Dim cnn As ADODB.connection
   Dim rst As ADODB.Recordset
   Dim strSQL As String
@@ -23,7 +24,7 @@ Sub DisplayData()
   For i = 0 To rst.Fields.Count - 1
     Sheet1.Cells(1, i + 1).Value = rst.Fields(i).Name
   Next
-  'Range("A1:" + i).Item(xlnumbersastext).Ignore = True
+ 
   
   'Copy the data to the worksheet
   Sheet1.Range("A2").CopyFromRecordset rst
@@ -42,22 +43,31 @@ Sub SaveChanges()
   Dim r As Long, c As Long
   
   'Create the connection string
-  strConnect = "Provider=SQLOLEDB;Data Source=RITA-HP-LAPTOP;Initial Catalog=POCdatabaseForExcel;Integrated Security=SSPI;"
+  strConnect = connection
   
   'Open the connection
   Set cnn = New ADODB.connection
   cnn.Open strConnect
   
+
+  'Prompt the user for the name of the primary key column
+  primaryKey = InputBox("Please enter the name of the primary key column:")
+
   'Loop through the rows in the worksheet
   For r = 2 To Sheet1.UsedRange.Rows.Count
+  
     'Loop through the columns in the worksheet
     For c = 1 To Sheet1.UsedRange.Columns.Count
-      'Create the SQL statement
-      strSQL = "UPDATE MOCK_DATA SET " & Sheet1.Cells(1, c).Value & " = '" & Sheet1.Cells(r, c).Value & "' WHERE Column2 = '" & Sheet1.Cells(r, 2).Value & "'"
-      'Execute the SQL statement
-      cnn.Execute strSQL
+    
+    'Create the SQL statement
+    strSQL = "UPDATE MOCK_DATA SET " & Sheet1.Cells(1, c).Value & " = '" & Sheet1.Cells(r, c).Value & "' WHERE " & primaryKey & " = '" & Sheet1.Cells(r, 2).Value & "'"
+    
+    'Execute the SQL statement
+    cnn.Execute strSQL
+    
     Next c
   Next r
+
   
   'Close the connection
   cnn.Close
