@@ -1,4 +1,4 @@
-Const connection As String = "Provider=SQLOLEDB;Data Source=RITA-HP-LAPTOP;Initial Catalog=POCdatabaseForExcel;Integrated Security=SSPI;"
+Const connection As String = "Provider=SQLOLEDB;Data Source=[Your Server];Initial Catalog=[Your Database];Integrated Security=SSPI;"
 
 Sub DisplayData()
   Dim cnn As ADODB.connection
